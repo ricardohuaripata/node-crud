@@ -1,4 +1,7 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+
 const app = express();
 
 app.get("/", function (req, res) {
@@ -12,5 +15,7 @@ app.get("/nuevo", function (req, res) {
 
 console.log("Corriendo en el puerto 5000")
 
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 4000);
+console.log(process.env.PORT)
+
 export default app;
