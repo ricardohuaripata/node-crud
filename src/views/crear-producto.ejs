@@ -1,0 +1,51 @@
+<html>
+
+    <head>
+        <%- include('partials/head') %>
+        <title>Editar producto</title>
+    </head>
+
+    <body>
+
+        <%- include('partials/navbar') %>
+
+            <div class="content">
+                <%- include('partials/header') %>
+
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4">
+                            <form class="login-form" action="/producto/create" method="POST">
+                                <h2 class="text-center mb-4">Añadir producto</h2>
+                                <div class="form-group">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Introduce un nombre" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción</label>
+                                    <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Introduce una descripcion" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="precio">Precio</label>
+                                    <input type="number" id="precio" name="precio" class="form-control" placeholder="Introduce el precio" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="existencias">Existencias</label>
+                                    <input type="number" id="existencias" name="existencias" class="form-control" placeholder="Introduce el número de existencias" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Añadir" class="btn btn-primary btn-block">
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>  
+
+            </div>
+
+        <%- include('partials/footer') %>
+
+    </body>
+
+</html>

@@ -1,0 +1,79 @@
+<html>
+
+    <head>
+        <%- include('partials/head') %>
+        <title>Admin</title>
+    </head>
+
+    <body>
+
+        <%- include('partials/navbar') %>
+
+        <div class="content">
+            <%- include('partials/header') %>
+
+            <main class="container">
+                <div class="bg-light p-5 rounded">
+                    <h1>Administrar productos</h1>
+                    <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed libero sequi tempore
+                        porro quam veritatis aliquam. Nihil iusto labore, aspernatur voluptas quis animi? Dolores,
+                        libero! Rem ex quod saepe similique!</p>
+                    <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed libero sequi tempore
+                        porro quam veritatis aliquam. Nihil iusto labore, aspernatur voluptas quis animi? Dolores,
+                        libero! Rem ex quod saepe similique!</p>
+                    <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed libero sequi tempore
+                        porro quam veritatis aliquam. Nihil iusto labore, aspernatur voluptas quis animi? Dolores,
+                        libero! Rem ex quod saepe similique!</p>
+                </div>
+
+                <div class="bg-light p-5 rounded mt-4">
+                    <h1>Productos</h1>
+                    <a class="btn btn-lg btn-outline-success" href="/crear-producto" role="button">Añadir producto</a>
+
+                    <% if (productos.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Existencias</th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% productos.forEach(producto => { %>
+                                <tr>
+                                  <td><%= producto.id %></td>
+                                  <td><%= producto.nombre %></td>
+                                  <td><%= producto.descripcion %></td>
+                                  <td><%= producto.precio %></td>
+                                  <td><%= producto.existencias %></td>
+                                  <td>
+                                    <a class="btn btn-lg btn-outline-primary" href="/editar-producto/<%= producto.id %>" role="button">Editar</a>
+                                  </td>
+                                  <td>
+                                    <a class="btn btn-lg btn-outline-danger" href="/producto/delete/<%= producto.id %>" role="button">Eliminar</a>
+                                  </td>
+
+                                </tr>
+                              <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                      <p>No hay productos en la base de datos.</p>
+                    <% } %>
+                  
+                  </div>
+            </main>
+        </div>
+
+        <%- include('partials/footer') %>
+
+    </body>
+
+</html>
