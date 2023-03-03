@@ -5,7 +5,7 @@ dotenv.config();
 const app = express();
 
 app.get("/", function (req, res) {
-  res.send("FUNCIONA");
+  res.send("FUNCIONA CORRIENDO EN EL PUERTO " + process.env.PORT);
 });
 
 app.get("/nuevo", function (req, res) {
