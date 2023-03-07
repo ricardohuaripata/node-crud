@@ -21,26 +21,43 @@ const router = Router();
 //usar sesiones
 router.use(
   session({
-      secret: '12345',
-      resave: true,
-      saveUninitialized: true
+    secret: "36ED3",
+    resave: true,
+    saveUninitialized: true,
   })
 )
 
+// Middleware para verificar si el usuario ha iniciado sesión
+const requireLogin = (req, res, next) => {
+  if (req.session.username) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
 //crear rutas
-router.get("/", vistaHome);
+
 router.get("/login", vistaLogin);
 router.get("/registro", vistaRegistro);
-router.get("/admin", vistaAdmin);
-router.get("/editar-producto/:id", vistaEditarProducto);
-router.get("/crear-producto", vistaCrearProducto);
 
 router.post("/registrarNuevoUsuario", registrarUsuario);
-//router.post("/iniciarSesionUsuario", iniciarSesion);
+router.post("/iniciarSesionUsuario", iniciarSesion);
 
-router.post("/producto/update", editarProducto);
-router.post("/producto/create", crearProducto);
-router.get("/producto/delete/:id", eliminarProducto);
+router.get("/", vistaHome);
+router.get("/admin", requireLogin, vistaAdmin);
+router.get("/editar-producto/:id", requireLogin, vistaEditarProducto);
+router.get("/crear-producto", requireLogin, vistaCrearProducto);
+
+router.post("/producto/update", requireLogin, editarProducto);
+router.post("/producto/create", requireLogin, crearProducto);
+router.get("/producto/delete/:id", requireLogin, eliminarProducto);
+
+router.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+});
 
 //module.exports = router
 export default router;

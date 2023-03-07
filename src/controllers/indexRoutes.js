@@ -1,20 +1,21 @@
 import { POOL } from "../db/db.js";
 import bcrypt from 'bcrypt'; // hashear password
+import session from "express-session";
 
 export const vistaHome = (req, res) => {
-  res.render("index", { title: "Inicio" });
+  res.render("index", { title: "Inicio", req: req });
 };
 
 export const vistaLogin = (req, res) => {
-  res.render("login", { title: "Login" });
+  res.render("login", { title: "Login", req: req, mensajeError: null });
 };
 
 export const vistaRegistro = (req, res) => {
-  res.render("registro", { title: "Registro", mensajeError: null });
+  res.render("registro", { title: "Registro", req: req, mensajeError: null });
 };
 
 export const vistaCrearProducto = (req, res) => {
-  res.render("crear-producto", { title: "Crear producto" });
+  res.render("crear-producto", { title: "Crear producto", req: req });
 };
 
 
@@ -24,12 +25,13 @@ export const vistaEditarProducto = async (req, res) => {
 
   try {
     connection = await POOL.getConnection();
+    //comprobar si exite el producto
     const [rows, fields] = await connection.query('SELECT * FROM Productos WHERE id = ?', [id]);
 
     if (rows.length === 0) {
       res.status(404).send('Producto no encontrado');
     } else {
-      res.render('editar-producto', { title: 'Editar producto', producto: rows[0] });
+      res.render('editar-producto', { title: 'Editar producto', req: req, producto: rows[0] });
     }
   } catch (error) {
     console.error('Error al obtener el producto: ', error);
@@ -48,7 +50,7 @@ export const vistaAdmin = async (req, res) => {
   try {
     connection = await POOL.getConnection();
     const [rows, fields] = await connection.query('SELECT * FROM Productos');
-    res.render('admin', { title: 'Admin', productos: rows });
+    res.render('admin', { title: 'Admin', req: req, productos: rows });
   } catch (error) {
     console.error('Error al obtener la lista de productos: ', error);
     res.status(500).send("Error al obtener la lista de productos");
@@ -68,20 +70,15 @@ export const registrarUsuario = async (req, res) => {
     connection = await POOL.getConnection();
     const [result] = await connection.query('INSERT INTO Usuarios (username, password, firstname, lastname, email) VALUES (?, ?, ?, ?, ?)', [username, hashedPassword, firstname, lastname, email]);
     console.log(result);
-    res.redirect('/admin');
+    res.redirect('/login');
   } catch (error) {
     console.error('Error al registrar usuario: ', error);
-    res.render("registro", { title: "Registro", mensajeError: error.sqlMessage });
+    res.render("registro", { title: "Registro", req: req, mensajeError: error.sqlMessage });
   } finally {
     if (connection) {
       connection.release();
     }
   }
-};
-
-export const iniciarSesion = (req, res) => {
-  req.session.usuario = 'admin';
-  req.session.rol = 'admin';
 };
 
 // Vista para crear un producto
@@ -142,4 +139,45 @@ export const eliminarProducto = async (req, res) => {
       connection.release();
     }
   }
+};
+
+export const iniciarSesion = async (req, res) => {
+  const { username, password } = req.body;
+  let connection;
+
+  try {
+    connection = await POOL.getConnection();
+    const [rows, fields] = await connection.query('SELECT * FROM Usuarios WHERE username = ?', [username]);
+    console.log(rows);
+
+    const user = rows[0];
+
+    if (!user) {
+      // El usuario no existe
+      res.render("login", { title: "Login", req: req, mensajeError: 'Usuario o contraseña incorrectos' });
+      return;
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      // La contraseña es incorrecta
+      res.render("login", { title: "Login", req: req, mensajeError: 'Usuario o contraseña incorrectos' });
+      return;
+    }
+
+    console.log("El usuario es valido");
+    // El usuario y la contraseña son válidos, guardar el nombre de usuario en la sesión
+    req.session.username = user.username;
+    res.redirect('/');
+
+  } catch (error) {
+    console.error('Error al iniciar sesión: ', error);
+    res.status(500).send("Error al iniciar sesión");
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+
 };

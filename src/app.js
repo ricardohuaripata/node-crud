@@ -8,8 +8,6 @@ import dotenv from "dotenv";
 import { POOL } from "./db/db.js";
 import bodyParser from "body-parser";
 
-import session from "express-session";
-
 //configurar variables de entorno
 dotenv.config();
 
@@ -28,20 +26,10 @@ app.use(bodyParser.json());
 
 //crear el servidor
 app.listen(port);
-console.log("El servidor esta escuchando en el puerto ", port);
+console.log("El servidor esta escuchando en el puerto", port);
 
 //usar router
 app.use(indexRoutes);
 
-//usar sesiones
-app.use(
-    session({
-        secret: '12345',
-        resave: true,
-        saveUninitialized: true
-    })
-)
-
 // configurar carpeta public para contenido estatico
-
 app.use(express.static(path.join(__dirname, "public")));

@@ -14,8 +14,12 @@
                     <a class="nav-link" href="/admin">Administrar</a>
                 </li>
             </ul>
-            <a class="btn btn-outline-success" href="/login">Login</a>
-            <a class="btn btn-outline-success" href="/registro">Registrarse</a>
+            <% if (req.session.username) { %>
+                <a class="btn btn-outline-danger" href="/logout">Logout</a>
+            <% } else { %>
+                <a class="btn btn-outline-success" href="/login">Login</a>
+                <a class="btn btn-outline-success" href="/registro">Registrarse</a>
+            <% } %>
 
         </div>
     </div>
