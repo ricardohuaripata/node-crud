@@ -13,7 +13,3 @@ Aplicacion web en NodeJS con CRUD de productos y con login y registro de usuario
 ![](screenshots/create-product.png)
 
 ![](screenshots/update-product.png)
-
-![](screenshots/mobile1.png)
-
-![](screenshots/mobile2.png)
