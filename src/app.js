@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4000;
 
 //configurar el motor de plantillas
 app.set("view engine", "ejs");
